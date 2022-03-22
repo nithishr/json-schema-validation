@@ -32,6 +32,7 @@ Set the environment variables to connect to Couchbase by copying the `.env.examp
 ```
 
 Run the script
+
 $ `python validate_documenst.py`
 
 The output shows the schema for the documents. This is followed by the documents that do not conform to the schema.
