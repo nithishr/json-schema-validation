@@ -51,19 +51,13 @@ class UserProfile(BaseModel):
     job: Optional[str]
     address: Optional[str]
 
-    # @validator("website")
-    # def unsupported_domain(cls, v):
-    #     """Check if the domains contain unsupported domains"""
-    #     for domain in v:
-    #         if ".ru" in domain:
-    #             raise ValueError(".ru domain unsupported ")
-    #     return v
-
 
 if __name__ == "__main__":
 
     print("Schema for Model\n", UserProfile.schema_json(indent=2))
     password_authenticator = PasswordAuthenticator(DB_USER, DB_PWD)
+
+    # Connect to Couchbase Cluster
     cluster = Cluster(
         CONN_STR,
         ClusterOptions(password_authenticator),
@@ -71,9 +65,11 @@ if __name__ == "__main__":
     validation_error_count = 0
     query = f"select profile.* from `{BUCKET}`.{SCOPE}.{COLLECTION} profile LIMIT {DOCUMENT_LIMIT}"
     try:
+        # Fetch the documents and test them
         results = cluster.query(query)
         for row in tqdm(results):
             try:
+                # Check the validity of the documents
                 UserProfile.parse_obj(row)
                 validation_error_count += 1
             except ValidationError as e:

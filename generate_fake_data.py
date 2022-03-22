@@ -28,16 +28,20 @@ for i in tqdm(range(FAKE_DOCS_COUNT)):
         ]
     )
     profile["phone"] = {"home": fake.phone_number(), "mobile": fake.phone_number()}
+
+    # Simulate broken documents
     choice = random.random()
-    if choice <= 0.1:
+    if choice <= MAIL_ERRORS:
         del profile["mail"]
         error_email += 1
-    if choice <= 0.2:
+
+    if choice <= PHONE_ERRORS:
         del profile["phone"]["mobile"]
         error_phone += 1
 
     docs.append(profile)
 
+# Write the data to an output file for importing into couchbase
 with open("fake_data.json", "w") as fout:
     json.dump(docs, fout)
 
