@@ -1,5 +1,5 @@
 couchbase==3.2.2
 Faker==13.3.2
-pydantic==1.9.0
+pydantic==1.10.13
 python-dotenv==0.19.2
 tqdm==4.63.0
